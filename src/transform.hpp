@@ -1,7 +1,10 @@
 #pragma once
 
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
-auto ppm_to_ascii(std::ifstream f) -> std::vector<std::string>;
+struct RGB;
+
+auto ppm_to_rgbs(std::ifstream f) -> std::vector<std::vector<RGB>>;
