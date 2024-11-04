@@ -5,6 +5,4 @@
 #include <string>
 #include <vector>
 
-struct RGB;
-
-auto ppm_to_rgbs(std::ifstream f) -> std::vector<std::vector<RGB>>;
+struct Rgb;
