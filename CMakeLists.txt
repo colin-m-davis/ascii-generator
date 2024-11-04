@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 
 add_executable(ascii-generator src/main.cpp)
-target_compile_options(ascii-generator PRIVATE -Wall -Werror -Wextra -Wshadow -Wpedantic -Wunused -Wnon-virtual-dtor)
+target_compile_options(ascii-generator PRIVATE -Wall -Werror -Wextra -Wshadow -Wpedantic -Wunused -Wnon-virtual-dtor -Ofast)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

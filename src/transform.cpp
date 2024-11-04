@@ -11,10 +11,6 @@ const std::string ASCII_CHARACTERS = " .:-=+*abcdefg#%0@";
 //     " `.-':_,^=;><+!rc*/"
 //     "z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@";
 
-struct Rgb {
-  unsigned char r, g, b;
-};
-
 template <typename Pixel> struct Image {
   int width;
   int height;
@@ -30,11 +26,14 @@ template <typename Pixel> struct Image {
   }
 };
 
+struct Rgb {
+  unsigned char r, g, b;
+};
+
 auto ppm_file_to_rgb_image(const auto& inpath) -> std::optional<Image<Rgb>> {
   std::ifstream infile(inpath, std::ios::binary);
   if (!infile.is_open()) {
-    throw std::invalid_argument(std::string("Error opening file: ") +
-                                inpath.c_str());
+    return std::nullopt;
   }
   std::string magic_number;
   int width, height, max_color_value;
@@ -45,19 +44,19 @@ auto ppm_file_to_rgb_image(const auto& inpath) -> std::optional<Image<Rgb>> {
   return Image<Rgb>{width, height, pixels};
 }
 
-auto n_to_ascii(const int n) -> char {
+auto n_to_ascii(const int n) -> unsigned char {
   const int index = std::min(n / ((MAX_COLOR + 1) / ASCII_CHARACTERS.length()),
                              ASCII_CHARACTERS.length() - 1);
   return ASCII_CHARACTERS[index];
 }
 
-auto rgb_image_to_ascii_image(const Image<Rgb>& image) -> Image<char> {
+auto rgb_image_to_ascii_image(const Image<Rgb>& image) -> Image<unsigned char> {
   const auto [width, height, _] = image;
 
-  std::vector<char> pixels;
+  std::vector<unsigned char> pixels;
   pixels.reserve(width * height);
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
+  for (auto y = 0; y < height; ++y) {
+    for (auto x = 0; x < width; ++x) {
       int count_of_nearby = 0;
       int sum_of_nearby_averages = 0;
       for (auto dy = -1; dy <= 1; ++dy) {
@@ -81,7 +80,7 @@ auto rgb_image_to_ascii_image(const Image<Rgb>& image) -> Image<char> {
 
 const int SHRINKER = 4;
 
-auto write_ascii_image(const Image<char>& image) -> void {
+auto write_ascii_image(const Image<unsigned char>& image) -> void {
   const auto& [width, height, pixels] = image;
   std::cout << "\033[2J\033[H";
   for (auto y = 0; y < height; y += SHRINKER) {
